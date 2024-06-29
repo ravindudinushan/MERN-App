@@ -1,30 +1,25 @@
+const Product = require('../model/Product');
+
 const ProductController = {
-    getAllProducts: function(req, res, next) {
-        res.json(
-            [
-                {
-                    "id": 1,
-                    "name": "Spinach",
-                    "price": "200",
-                    "currency": "LKR",
-                    "image": "spinach.png"
-                },
-                {
-                    "id": 2,
-                    "name": "Beans",
-                    "price": "150",
-                    "currency": "LKR",
-                    "image": "beans.png"
-                },
-                {
-                    "id": 3,
-                    "name": "Tomato",
-                    "price": "250",
-                    "currency": "LKR",
-                    "image": "tomato.png"
-                }
-            ]
-        )
+    getAllProducts: async function(req, res, next) {
+        try {
+            const productList = await Product.find();
+            res.status(200).json(productList);
+        }catch (err){
+            console.error(err);
+            res.status(500).json({error: 'Something went wrong..!'})
+        }
+    },
+
+    saveProduct: async function(req, res, next){
+        try {
+            const productData = req.body;
+            const product = await Product.create(productData);
+            res.status(200).json(product);
+        }catch (err){
+            console.error(err);
+            res.status(500).json({error: 'Something went wrong..!'})
+        }
     }
 }
 
